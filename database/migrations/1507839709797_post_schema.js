@@ -6,10 +6,10 @@ class PostSchema extends Schema {
   up () {
     this.create('posts', (table) => {
       table.increments()
-      table.timestamps()
+      table.integer('user_id').unsigned()
       table.string('title')
       table.text('body')
-      table.integer('user_id').unsigned()
+      table.timestamps()
     })
   }
 

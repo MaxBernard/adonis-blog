@@ -4,53 +4,33 @@ const Post = use('App/Models/Post')
 const { validateAll } = use('Validator')
 
 class PostController {
+  /**
+   * Fetch all posts inside our database.
+   *
+   * ref: http://adonisjs.com/docs/4.1/lucid#_all
+   */
   async index ({ view }) {
-    /**
-     * Fetch all posts inside our database.
-     *
-     * ref: http://adonisjs.com/docs/4.1/lucid#_all
-     */
     const posts = await Post.all()
-
-    /**
-     * Render the view 'posts.index'
-     * with the posts fetched as data.
-     *
-     * ref: http://adonisjs.com/docs/4.1/views
-     */
     return view.render('posts.index', { posts: posts.toJSON() })
   }
 
+  //=========================
+  // Create
   create ({ view }) {
-    /**
-     * Render the view 'posts.create'.
-     *
-     * ref: http://adonisjs.com/docs/4.1/views
-     */
     return view.render('posts.create')
   }
 
+  //=========================
+  // Store
   async store ({ session, request, response }) {
-    /**
-     * Getting needed parameters.
-     *
-     * ref: http://adonisjs.com/docs/4.1/request#_only
-     */
+
     const data = request.only(['title', 'body'])
 
-    /**
-     * Validating our data.
-     *
-     * ref: http://adonisjs.com/docs/4.1/validator
-     */
     const validation = await validateAll(data, {
       title: 'required',
       body: 'required',
     })
 
-    /**
-     * If validation fails, early returns with validation message.
-     */
     if (validation.fails()) {
       session
         .withErrors(validation.messages())
@@ -59,48 +39,36 @@ class PostController {
       return response.redirect('back')
     }
 
-    /**
-     * Creating a new post into the database.
-     *
-     * ref: http://adonisjs.com/docs/4.1/lucid#_create
-     */
     await Post.create(data)
 
     return response.redirect('/')
   }
 
-  async edit ({ params, view }) {
-    /**
-     * Finding the post.
-     *
-     * ref: http://adonisjs.com/docs/4.1/lucid#_findorfail
-     */
+  //=========================
+  // Show a post's body
+  async show ({ params, view }) {
     const post = await Post.findOrFail(params.id)
+    return view.render('posts.show', { post: post.toJSON() })
+  }
 
+  //=========================
+  // Edit a post
+  async edit ({ params, view }) {
+    const post = await Post.findOrFail(params.id)
     return view.render('posts.edit', { post: post.toJSON() })
   }
 
+  //=========================
+  // Update a post
   async update ({ params, session, request, response }) {
-    /**
-     * Getting needed parameters.
-     *
-     * ref: http://adonisjs.com/docs/4.1/request#_only
-     */
+  
     const data = request.only(['title', 'body'])
 
-    /**
-     * Validating our data.
-     *
-     * ref: http://adonisjs.com/docs/4.1/validator
-     */
     const validation = await validateAll(data, {
       title: 'required',
       body: 'required',
     })
 
-    /**
-     * If validation fails, early returns with validation message.
-     */
     if (validation.fails()) {
       session
         .withErrors(validation.messages())
@@ -109,19 +77,16 @@ class PostController {
       return response.redirect('back')
     }
 
-    /**
-     * Finding the post and updating fields on it
-     * before saving it to the database.
-     *
-     * ref: http://adonisjs.com/docs/4.1/lucid#_inserts_updates
-     */
     const post = await Post.findOrFail(params.id)
+
     post.merge(data)
     await post.save()
 
     return response.redirect('/')
   }
 
+  //=========================
+  // Delete a post
   async delete ({ params, response }) {
     /**
      * Finding the post and deleting it

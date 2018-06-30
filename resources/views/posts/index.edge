@@ -2,23 +2,25 @@
 
 @section('content')
   @set('title', 'Blog Demo')
-  <div class="jumbotron ">
-    <h1 class="display-3">Adonis Framework</h1>
-    <p class="lead">MVC Framework for Node.js to write webapps with less code.</p>
-    <p class="lead">
-      <a class="btn btn-primary btn-lg" href="http://adonisjs.com" role="button">Learn More</a>
-    </p>
-  </div>
 
-  {{--
-    Looping over all posts.
-
-    ref: http://edge.adonisjs.com/docs/iteration
-    --}}
-  @each(post in posts, include = 'posts.partials.post-card')
-  @else
-    @component('components.alert', { type: 'info' })
-      There's no post available!
-    @endcomponent
-  @endeach
+  {{-- Looping over all posts --}}
+  @if( posts.length > 0 )
+    @each(post in posts)
+      <div class="container">
+        <div class="row">
+          <!--div class="col-md-1 col-sm-1"><img style="width:50%" src="/storage/cover_images/{{--$post->cover_image--}}"></div-->
+          <!-- Post title -->
+          <div class="col-md-8 col-sm-8"><h4><a href="/posts/{{post.id}}">{{{ post.title }}</a></h4></div>
+          <!-- Post author -->
+          <!--div vertical-align: text-top>{{ post.user.name }}</div-->
+          <!-- Post date -->
+          <div vertical-align: text-bottom>{{ post.created_at }}</div>
+        </div>
+      </div>
+    @else
+      @component('components.alert', { type: 'info' })
+        There's no post available!
+      @endcomponent
+    @endeach
+  @endif
 @endsection

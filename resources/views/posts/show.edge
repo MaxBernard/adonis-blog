@@ -1,0 +1,18 @@
+@layout('layout.app')
+
+@section('content')
+  @set('title', 'Blog Demo')
+
+  <div class="row">
+    <div class="col-md-8 col-sm-8">
+      <h3>
+        {{ post.title }}
+        <small> Date: &nbsp; {{ post.created_at }} </small>
+      </h3>
+    </div>
+  </div>
+  <div class="row-fluid">
+    {{ post.body }}
+  </div>
+
+@endsection

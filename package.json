@@ -26,7 +26,8 @@
     "@adonisjs/validator": "^5.0.3",
     "@adonisjs/vow": "^1.0.15",
     "@adonisjs/vow-browser": "^1.0.5",
-    "adonis-bundler": "^1.0.1"
+    "adonis-bundler": "^1.0.1",
+    "mysql": "^2.15.0"
   },
   "devDependencies": {
     "bootstrap": "^4.1.1",
